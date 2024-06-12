@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // defines structure of document
-const bookSchema = mongoose.Schema({
+const bookSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
