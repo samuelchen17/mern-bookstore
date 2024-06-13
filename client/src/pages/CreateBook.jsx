@@ -15,7 +15,7 @@ function CreateBook() {
 
   const handleSaveBook = () => {
     // create data object
-    // access bookDetails object
+    // access bookDetails state object
     const data = {
       title: bookDetails.title,
       author: bookDetails.author,
@@ -42,6 +42,7 @@ function CreateBook() {
     setBooksDetails({
       // spreading here for immutable state update, creating new object that includes all existing properties
       ...bookDetails,
+      // if publishYear then force change value to a num
       [name]: name === "publishYear" ? Number(value) : value,
     });
   };
