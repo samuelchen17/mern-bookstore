@@ -1,7 +1,99 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
+import BackButton from "../components/BackButton";
 
 function CreateBook() {
-  return <div>CreateBook</div>;
+  const [bookDetails, setBooksDetails] = useState({
+    title: "",
+    author: "",
+    publishYear: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSaveBook = () => {
+    // create data object
+    // access bookDetails object
+    const data = {
+      title: bookDetails.title,
+      author: bookDetails.author,
+      publishYear: bookDetails.publishYear,
+    };
+
+    setLoading(true);
+    axios
+      .post("http://localhost:5555/books", data)
+      .then(() => {
+        setLoading(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        setLoading(false);
+        alert("Please check console");
+        console.log(err);
+      });
+  };
+
+  const handleOnChange = (e) => {
+    // use name from the input to store it in bookDetails object
+    const { name, value } = e.target;
+    setBooksDetails({
+      // spreading here for immutable state update, creating new object that includes all existing properties
+      ...bookDetails,
+      [name]: name === "publishYear" ? Number(value) : value,
+    });
+  };
+
+  return (
+    <div className="p4">
+      <BackButton />
+      <h1 className="text-3xl my-4">Create Book</h1>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto">
+          <div className="my-4 ">
+            <label className="text-xl mr-4 text-gray-500">Title</label>
+            <input
+              type="text"
+              // add name for the handleOnChange to store into bookDetails object
+              name="title"
+              value={bookDetails.title}
+              onChange={handleOnChange}
+              className="border-2 border-gray-500 px-4 py-2 w-full"
+            />
+          </div>
+
+          <div className="my-4 ">
+            <label className="text-xl mr-4 text-gray-500">Author</label>
+            <input
+              type="text"
+              name="author"
+              value={bookDetails.author}
+              onChange={handleOnChange}
+              className="border-2 border-gray-500 px-4 py-2 w-full"
+            />
+          </div>
+
+          <div className="my-4 ">
+            <label className="text-xl mr-4 text-gray-500">Publish Year</label>
+            <input
+              type="number"
+              name="publishYear"
+              value={bookDetails.publishYear}
+              onChange={handleOnChange}
+              className="border-2 border-gray-500 px-4 py-2 w-full"
+            />
+          </div>
+          <button className="p-2 bg-sky-300 m-8" onClick={handleSaveBook}>
+            Save
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default CreateBook;
