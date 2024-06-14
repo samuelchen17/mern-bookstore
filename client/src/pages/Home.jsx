@@ -54,6 +54,7 @@ function Home() {
         </Link>
       </div>
       {/* if loading = true, show loading icon, else generate the list */}
+      {/* nested conditional operator */}
       {loading ? (
         <Spinner />
       ) : displayType === "table" ? (
